@@ -2,21 +2,20 @@
 import speech_recognition as sr
 import os
 import requests
-#  import socketio
+import socketio
 
 #  URL = "http://0.0.0.0:5000/"
-URL = 'localhost:5000'
-#  sio = socketio.Client()
-#  sio.connect(URL)
+URL = "http://0.0.0.0:5000/"
+sio = socketio.Client()
+sio.connect(URL)
 
+@sio.event
+def connect():
+    print("I'm connected!")
 
-#  @sio.event
-#  def connect():
-#      print("I'm connected!")
-
-#  @sio.event
-#  def disconnect():
-#      print("I'm disconnected!")
+@sio.event
+def disconnect():
+    print("I'm disconnected!")
 
 
 def sayCommand(newCommand): 
@@ -31,25 +30,18 @@ def parse_command(command):
     processedCommand = command.lower()
     print("processedCommand: " + processedCommand)
 
-    if split_text[0] == "raise": 
-        part = "_".join(split_text[1:])
-        print("part: ", part)
-        pass
+    action = split_text[0]
+    part = "_".join(split_text[1:])
 
-    elif split_text[0] == "lower": 
-        part = "_".join(split_text[1:])
-        pass
+    if action == "raised":
+        action = "raise"
 
-    elif (processedCommand == "initialize"): 
-        #  sio.emit("send_message", {"data": "initialize"})
-        res = requests.post(URL + "voice_command", json={'message': "open mask" })
-    elif (processedCommand == "down"): 
-        #  sio.emit("send_message", {"data": "down"})
-        res = requests.post(URL + "voice_command", json={'message': "close mask" })
-    else: 
+    valid_actions = ["raise", "lower", "initialize", "calibrate"]
+    if action not in valid_actions: 
         print("command not found")
         return
 
+    res = requests.post(URL + "voice_command", json={'message': action, 'part': part })
     print("sent message {command} to server".format(command=processedCommand))
 
 while(1): 
