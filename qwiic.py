@@ -60,10 +60,68 @@ def smooth_move(servo, angle, reverse=False):
         time.sleep(0.005)
 
 
+def rotation_test(servo): 
 
-#circular_move_all(test_indices, move_range)
-smooth_move(15, 70)
-smooth_move(15, 70, reverse=True)
+	test.move_servo_position(servo, 0)
+	print("moved to 0")
+	time.sleep(1)
+
+	test.move_servo_position(servo, 90)
+	print("moved to 90")
+	time.sleep(1)
+
+	test.move_servo_position(servo, 0)
+	print("moved to 0")
+	time.sleep(1)
+
+
+def initialize(): 
+	for i in range(0, 16): 
+		test.move_servo_position(0, 0)
+
+
+def stop_sword(servo=3): 
+		test.move_servo_position(servo, 0)
+		print("sword stopped")
+
+def extend_sword(servo=3, reverse=False):
+
+	if reverse: 
+		test.move_servo_position(servo, 0)
+		print("sword retracted")
+	else: 
+		test.move_servo_position(servo, 158)
+		print("sword extended")
+	
+
+def main():
+	#circular_move_all(test_indices, move_range)
+	#smooth_move(15, 70)
+	#smooth_move(15, 70, reverse=True)
+
+	initialize()
+	print("initialized")
+
+	extend_sword()
+	time.sleep(1)
+	extend_sword(reverse=True)
+
+
+	#rotation_test(3)
+	#test.move_servo_position(3, 0)
+	#smooth_move(3, 0)
+	return
+
+	smooth_move(0, 0)
+	smooth_move(0, 45)
+	smooth_move(0, 0)
+	print("moved to 0")
+	#smooth_move(15, 70, reverse=True)
+
+
+if __name__ == "__main__":
+	main()
+
 
 
 
