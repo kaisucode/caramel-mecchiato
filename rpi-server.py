@@ -1,14 +1,23 @@
 
+from flask import Flask, request, jsonify
+from flask_cors import CORS, cross_origin
+from flask_socketio import SocketIO, emit
 
+import json
 import pi_servo_hat
 import time
+
 
 test = pi_servo_hat.PiServoHat()
 test.restart()
 
+PORT = 5000
+app = Flask(__name__)
 
-OTHER = 2
-shoulder = 4
+cors = CORS(app)
+socketio = SocketIO(app, cors_allowed_origins="*")
+app.config['CORS_HEADERS'] = 'Content-Type'
+
 
 settings = {
 	"mk6": {
@@ -26,6 +35,7 @@ settings = {
 }
 
 cur_mode = "mk6"
+a_sword = Sword()
 
 def get_pin(name): 
 	return settings[cur_mode]["pins"][name]
@@ -52,22 +62,6 @@ def circular_move_all(test_indices, move_range):
     time.sleep(1)
 
 
-def test2(): 
-    # Moves servo position to 0 degrees (1ms), Channel 0
-    test.move_servo_position(0, 0)
-    test.move_servo_position(shoulder, 0)
-    test.move_servo_position(OTHER, 0)
-
-    # Pause 1 sec
-    time.sleep(1)
-
-    # Moves servo position to 90 degrees (2ms), Channel 0
-    test.move_servo_position(0, 90)
-    test.move_servo_position(shoulder, 90)
-    test.move_servo_position(OTHER, 90)
-
-    # Pause 1 sec
-    time.sleep(1)
 
 #test_indices = [0, 2, 4]
 test_indices = [0, 1, 15]
@@ -176,6 +170,33 @@ def run_diagnostics():
 	for i in ["left_shoulder", "left_arm", "right_chest"]: 
 		test_low(i)
 
+@app.route('/voice_command', methods=["POST"])
+def voice_command(): 
+    action = request.json["message"]
+    part = request.json["part"]
+    print("action: ", action)
+    print("part: ", part)
+
+	shutdown()
+
+    if action == "initialize": 
+        initialize()
+    elif action == "calibrate": 
+        calibrate()
+    elif action == "diagostics": 
+        run_diagnostics()
+    elif action == "raise" or "lift": 
+        test_high(part)
+    elif action == "lower": 
+        tesT_low(part)
+    elif action == "sword": 
+        a_sword.extend_sword()
+
+	shutdown()
+
+    #  socketio.emit('pi_do', { 'message': message })
+    return jsonify({"status": "success"}), 200
+
 
 
 def main():
@@ -185,7 +206,6 @@ def main():
 
 	initialize()
 
-	a_sword = Sword()
 
 	calibrate()
 	run_diagnostics()
@@ -198,7 +218,8 @@ def main():
 
 
 if __name__ == "__main__":
-	main()
+    socketio.run(app, host="169.254.96.19", port=PORT, debug=True)
+
 
 
 

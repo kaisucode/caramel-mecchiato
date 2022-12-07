@@ -2,20 +2,21 @@
 import speech_recognition as sr
 import os
 import requests
-import socketio
+#  import socketio
 
 #  URL = "http://0.0.0.0:5000/"
-URL = "http://0.0.0.0:5000/"
-sio = socketio.Client()
-sio.connect(URL)
+#  URL = "http://raspberrypi.local:5000/"
+URL = "http://169.254.96.19:5000/"
+#  sio = socketio.Client()
+#  sio.connect(URL)
 
-@sio.event
-def connect():
-    print("I'm connected!")
+#  @sio.event
+#  def connect():
+#      print("I'm connected!")
 
-@sio.event
-def disconnect():
-    print("I'm disconnected!")
+#  @sio.event
+#  def disconnect():
+#      print("I'm disconnected!")
 
 
 def sayCommand(newCommand): 
