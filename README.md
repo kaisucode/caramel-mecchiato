@@ -1,7 +1,7 @@
 
 # caramel MECCHiato - A Mecha Project
 
-
+![image](assets/mecchiato-image.png)
 
 #### Commands
 
