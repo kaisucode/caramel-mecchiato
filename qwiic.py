@@ -12,8 +12,8 @@ shoulder = 4
 
 settings = {
 	"mk6": {
-		"starting_pos": {15: 120, 14: 0}, # servo_pin, degrees
-		"ending_pos": {15: 0, 14: 50}, # servo_pin, degrees
+		"starting_pos": {15: 120, 14: 45, 0: 160}, # servo_pin, degrees
+		"ending_pos": {15: 30, 14: 0, 0: 100}, # servo_pin, degrees
 		"pins": {
 			"left_shoulder": 15,
 			"left_arm": 14,
@@ -35,7 +35,7 @@ def get_starting_pos(name):
 	return settings[cur_mode]["starting_pos"].get(pin, 0)
 def get_ending_pos(name): 
 	pin = get_pin(name)
-	return settings[cur_mode]["ending_pos"].get(pin, 0)
+	return settings[cur_mode]["ending_pos"].get(pin, 30)
 
 def circular_move_all(test_indices, move_range): 
     for val in test_indices: 
@@ -98,7 +98,7 @@ def smooth_move(servo, end, start=0):
 
 	for i in range(start, end, order): 
 		test.move_servo_position(servo, i)
-		time.sleep(0.008)
+		time.sleep(0.006)
 
 
 def initialize(): 
@@ -135,38 +135,47 @@ def shutdown():
 	test.restart()
 
 
-def left_shoulder_demo(): 
-	print("begin left shoulder demo")
-	pin = get_pin("left_shoulder")
-	starting_pos = get_starting_pos("left_shoulder")
-	ending_pos = get_ending_pos("left_shoulder")
+def test_limits_circular(name): 
+	pin = get_pin(name)
+	starting_pos = get_starting_pos(name)
+	ending_pos = get_ending_pos(name)
 
 	smooth_move(pin, start=starting_pos, end=ending_pos)
 	time.sleep(0.5)
 	smooth_move(pin, start=ending_pos, end=starting_pos)
 
-def left_arm_demo(): 
-	print("begin left arm demo")
-	servo = settings[cur_mode]
-	pin = get_pin("left_arm")
-	starting_pos = get_starting_pos("left_arm")
-	ending_pos = get_ending_pos("left_arm")
 
-	smooth_move(pin, start=starting_pos, end=ending_pos)
-	time.sleep(0.5)
-	smooth_move(pin, start=ending_pos, end=starting_pos)
+def test_high(name): 
+	pin = get_pin(name)
+	starting_pos = get_starting_pos(name)
+	ending_pos = get_ending_pos(name)
+	#smooth_move(pin, start=starting_pos, end=ending_pos)
+	test.move_servo_position(pin, ending_pos)
 
-def run_tests(): 
+def test_low(name): 
+	pin = get_pin(name)
+	starting_pos = get_starting_pos(name)
+	ending_pos = get_ending_pos(name)
+	#smooth_move(pin, start=ending_pos, end=starting_pos)
+	test.move_servo_position(pin, starting_pos)
 
-	left_arm_demo()
+def calibrate(): 
+
+	# individual movement
+	#for part in ["right_chest"]: 
+	for part in ["left_shoulder", "left_arm", "right_chest"]: 
+		print("begin " + part + " demo")
+		test_limits_circular(part)
+		time.sleep(0.3)
+
+def run_diagnostics(): 
+
+	for i in ["left_shoulder", "left_arm", "right_chest"]: 
+		test_high(i)
 	time.sleep(1)
-	left_shoulder_demo()
-	time.sleep(1)
+	for i in ["left_shoulder", "left_arm", "right_chest"]: 
+		test_low(i)
 
-	# sword demo
-	#a_sword.extend_sword()
-	#time.sleep(1)
-	#a_sword.extend_sword(reverse=True)
 
 
 def main():
@@ -177,7 +186,12 @@ def main():
 	initialize()
 
 	a_sword = Sword()
-	run_tests()
+
+	calibrate()
+	run_diagnostics()
+
+	# sword demo
+	#a_sword.extend_sword()
 
 	shutdown()
 	return
