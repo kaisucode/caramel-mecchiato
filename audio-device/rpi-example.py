@@ -41,8 +41,10 @@ def voice_command():
 #      socketio.emit('pi_do', { 'message': message })
 
 
+host = "169.254.96.19"
+#host = "0.0.0.0"
 if __name__ == "__main__":
-    socketio.run(app, host="0.0.0.0", port=PORT, debug=True)
+    socketio.run(app, host=host, port=PORT, debug=True)
 
 
 
