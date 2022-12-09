@@ -6,7 +6,8 @@ import requests
 
 #  URL = "http://0.0.0.0:5000/"
 #  URL = "http://raspberrypi.local:5000/"
-URL = "http://169.254.96.19:5000/"
+#  URL = "http://169.254.96.19:5000/"
+URL = "http://172.18.132.80:5000/"
 #  sio = socketio.Client()
 #  sio.connect(URL)
 
@@ -36,12 +37,15 @@ def parse_command(command):
 
     if action == "raised":
         action = "raise"
+    if action == "test":
+        action = "tests"
 
-    valid_actions = ["raise", "lower", "initialize", "calibrate"]
+    valid_actions = ["raise", "lower", "initialize", "calibrate", "tests", "sword"]
     if action not in valid_actions: 
         print("command not found")
         return
 
+    print("sending message {command} to server...".format(command=processedCommand))
     res = requests.post(URL + "voice_command", json={'message': action, 'part': part })
     print("sent message {command} to server".format(command=processedCommand))
 
