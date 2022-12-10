@@ -1,7 +1,9 @@
 
 # caramel MECCHiato - A Mecha Project
 
-![image](assets/mecchiato-image.png)
+![robot-move](robot-move-24fps.gif)
+![sword](assets/sword-12fps.gif)
+
 
 #### Commands
 
@@ -9,10 +11,9 @@
 - Calibrate       (run tests on all servos)
 - Run diagnostics (move all servos simultaneously)
 - extend sword
-
-
-write websocket
-- lift <part_name_joined>
+- raise <part_name_joined>
 - lower <part_name_joined>
 
+![logo](assets/logo.png)
+![image](assets/mecchiato-image.png)
 
