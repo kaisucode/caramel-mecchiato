@@ -1,12 +1,7 @@
 
 # caramel MECCHiato - A Mecha Project
 
-![robot-move](assets/robot-move-24fps.gif)
-
-<center>
-  <img src="assets/sword-12fps.gif" width="35%">
-</center>
-
+![logo](assets/mecchiato-logo.jpg)
 
 #### Commands
 
@@ -17,6 +12,10 @@
 - raise <part_name_joined>
 - lower <part_name_joined>
 
-![logo](assets/mecchiato-logo.png)
+<p align="middle">
+  <img src="assets/robot-move-24fps.gif" width="45%">
+  <img src="assets/sword-12fps.gif" width="45%">
+</p>
+
 ![image](assets/mecchiato-image.png)
 
