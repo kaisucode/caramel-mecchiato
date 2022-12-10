@@ -1,9 +1,11 @@
 
 # caramel MECCHiato - A Mecha Project
 
-![robot-move](assets/)
+![robot-move](assets/robot-move-24fps.gif)
 
-<img src="assets/sword-12fps.gif" width="30%">
+<center>
+  <img src="assets/sword-12fps.gif" width="35%">
+</center>
 
 
 #### Commands
